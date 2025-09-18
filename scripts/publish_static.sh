@@ -37,20 +37,6 @@ fi
 HTACCESS_DEFAULT="${EXPORT_DIR}/.htaccess"
 if [ ! -f "$HTACCESS_DEFAULT" ]; then
   cat > "$HTACCESS_DEFAULT" <<'HT'
-# Basic caching & compression for static exports
-<IfModule mod_expires.c>
-  ExpiresActive On
-  ExpiresByType text/html "access plus 2h"
-  ExpiresByType text/css "access plus 7d"
-  ExpiresByType application/javascript "access plus 7d"
-  ExpiresByType image/svg+xml "access plus 30d"
-  ExpiresByType image/png "access plus 30d"
-  ExpiresByType image/jpeg "access plus 30d"
-  ExpiresByType image/webp "access plus 30d"
-</IfModule>
-<IfModule mod_deflate.c>
-  AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json image/svg+xml
-</IfModule>
 Options -Indexes
 HT
   msg "Created default .htaccess in export (you can customize it)."
