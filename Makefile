@@ -29,8 +29,7 @@ down:
 	docker compose down
 
 urls:
-	docker compose run --rm wp-cli wp option update home    'http://wp.local'
-	docker compose run --rm wp-cli wp option update siteurl 'http://wp.local'
+	bash scripts/post_import.sh
 
 selftest:
 	docker compose run --rm wp-cli wp db check --skip-plugins --skip-themes
