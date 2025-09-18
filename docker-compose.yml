@@ -1,0 +1,95 @@
+version: "3.9"
+
+services:
+  db:
+    image: mariadb:10.11
+    container_name: ${PROJECT_NAME}-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${WORDPRESS_DB_NAME}
+      MYSQL_USER: ${WORDPRESS_DB_USER}
+      MYSQL_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+    volumes:
+      - ./data/db:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -p${MYSQL_ROOT_PASSWORD} --silent"]
+      interval: 5s
+      timeout: 3s
+      retries: 40
+
+  db-importer:
+    image: mariadb:10.11
+    container_name: ${PROJECT_NAME}-db-importer
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      MYSQL_HOST: db
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: ${WORDPRESS_DB_NAME}
+      MYSQL_USER: ${WORDPRESS_DB_USER}
+      MYSQL_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - ./data/wp/_migracion/db_dumps:/dumps:ro
+      - ./scripts/db_import_entrypoint.sh:/import.sh:ro
+    entrypoint: ["sh","/import.sh"]
+
+  wordpress:
+    image: wordpress:6.6-php8.2-apache
+    container_name: ${PROJECT_NAME}-wp
+    depends_on:
+      db:
+        condition: service_healthy
+      db-importer:
+        condition: service_completed_successfully
+    restart: unless-stopped
+    ports:
+      - "80:80"                       # canonical local port
+    networks:
+      default:
+        aliases:
+          - ${LOCAL_DOMAIN}           # containers resolve wp.local → wordpress
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+      WP_HOME:    http://${LOCAL_DOMAIN}
+      WP_SITEURL: http://${LOCAL_DOMAIN}
+    volumes:
+      - ./data/wp:/var/www/html
+      - ./config/wp-config-local.php:/var/www/html/wp-config-local.php:ro
+      - ./exports:/var/www/html/simply-static-exports
+
+  wp-cli:
+    image: wordpress:cli-php8.2
+    container_name: ${PROJECT_NAME}-wpcli
+    depends_on:
+      wordpress:
+        condition: service_started
+    working_dir: /var/www/html
+    user: "33:33"                     # www-data
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: ${WORDPRESS_DB_NAME}
+      WORDPRESS_DB_USER: ${WORDPRESS_DB_USER}
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+      WP_HOME:    http://${LOCAL_DOMAIN}
+      WP_SITEURL: http://${LOCAL_DOMAIN}
+    volumes:
+      - ./data/wp:/var/www/html
+
+  phpmyadmin:
+    image: phpmyadmin:5
+    container_name: ${PROJECT_NAME}-pma
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      PMA_USER: ${WORDPRESS_DB_USER}
+      PMA_PASSWORD: ${WORDPRESS_DB_PASSWORD}
