@@ -1,11 +1,3 @@
-Awesome—let’s turn your working setup into a clean, copy-pasteable **tutorial**. I’ll use the approach that ended up working for you:
-
-* **Manual edit of `wp-config.php`** (recommended; scripts are optional).
-* **Canonical local domain `http://wp.local` on port 80** so both host and containers can self-request (Simply Static passes diagnostics).
-* A robust **db importer** that pulls the latest dump automatically.
-
----
-
 # From shared LAMP to local Docker + Simply Static (WordPress)
 
 ## What you’ll get
