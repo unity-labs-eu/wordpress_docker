@@ -15,3 +15,16 @@ REMOTE_WP_PATH=/home/youruser/public_html
 
 # (optional) production URL (for search-replace later)
 PROD_URL=https://www.yoursite.com
+
+# --- Publishing (adjust to your hosting) ---
+PUBLISH_MODE=direct
+# direct | atomic_symlink
+
+PUBLISH_REMOTE_STATIC_PATH=/home/youruser/public_html_static
+# docroot for static site (or subdomain root)
+
+PUBLISH_SSH_PORT=22
+# usually same as REMOTE_PORT
+
+PUBLISH_EXCLUDES=".DS_Store,Thumbs.db"
+# comma-separated
