@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 
-.PHONY: help dump sync up down urls selftest cli pma publish clean-db clean-all
+.PHONY: help dump sync up down urls selftest cli pma publish clean-db clean-all dump-local reseed-from-latest list-dumps
 
 help:
 	@echo "Targets:"
@@ -52,3 +52,17 @@ clean-db:
 clean-all:
 	docker compose down -v
 	rm -rf ./data/db/*
+
+# Dump the running local DB into ./data/wp/_migracion/db_dumps/local-<timestamp>.sql.gz
+dump-local:
+	bash scripts/dump_local_db.sh
+
+# Destroy local DB volume and re-seed from the most recent dump in db_dumps/
+reseed-from-latest:
+	docker compose down
+	rm -rf ./data/db/*
+	docker compose up -d
+
+# Show available dumps (newest first)
+list-dumps:
+	@ls -lt ./data/wp/_migracion/db_dumps | awk '{print $$6, $$7, $$8, $$9}'
