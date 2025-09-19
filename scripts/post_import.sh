@@ -6,7 +6,7 @@ set -a; source "$(dirname "$0")/../.env"; set +a
 OLD_URL=$(docker compose run --rm wp-cli wp option get siteurl --skip-plugins --skip-themes | tr -d '\r')
 echo "URL original detectada: ${OLD_URL}"
 
-NEW_URL="http://${LOCAL_DOMAIN}"
+NEW_URL="http://${LOCAL_DOMAIN}/"
 
 # Establece home + siteurl a la URL local
 docker compose run --rm wp-cli wp option update home    "$NEW_URL"
