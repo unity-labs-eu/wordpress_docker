@@ -28,3 +28,7 @@ PUBLISH_SSH_PORT=22
 
 PUBLISH_EXCLUDES=".DS_Store,Thumbs.db"
 # comma-separated
+
+# --- Backups before publish ---
+PUBLISH_BACKUP_BEFORE=1
+# 1=enabled, 0=skip

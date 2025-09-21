@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 
-.PHONY: help dump sync up down urls selftest cli pma publish clean-db clean-all dump-local reseed-from-latest list-dumps
+.PHONY: help dump sync up down urls selftest cli pma publish clean-db clean-all dump-local reseed-from-latest list-dumps backup-full publish-safe
 
 help:
 	@echo "Targets:"
@@ -41,6 +41,14 @@ cli:
 pma:
 	@echo "phpMyAdmin -> http://localhost:8081"
 
+backup-full:
+	bash scripts/backup_full.sh
+
+# Publish with automatic DB+files backup beforehand
+publish-safe:
+	PUBLISH_BACKUP_BEFORE=1 bash scripts/publish_static.sh
+
+# (Keep your existing `publish:` if you want the plain one)
 publish:
 	bash scripts/publish_static.sh
 
