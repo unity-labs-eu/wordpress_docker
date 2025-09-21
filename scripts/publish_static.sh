@@ -49,13 +49,13 @@ HT
   msg "Created default .htaccess in export root."
 fi
 
-# Ensure backups are NEVER uploaded
-# Add 'backups/' to excludes automatically (plus user-defined excludes)
-RSYNC_OPTS+=(--exclude="backups/")
-if [ -n "${PUBLISH_EXCLUDES:-}" ]; then
-  IFS=',' read -r -a EXC_ARR <<< "${PUBLISH_EXCLUDES}"
-  for e in "${EXC_ARR[@]}"; do e="$(echo "$e" | xargs)"; [ -n "$e" ] && RSYNC_OPTS+=(--exclude="$e"); done
-fi
+## Ensure backups are NEVER uploaded
+## Add 'backups/' to excludes automatically (plus user-defined excludes)
+#RSYNC_OPTS+=(--exclude="backups/")
+#if [ -n "${PUBLISH_EXCLUDES:-}" ]; then
+#  IFS=',' read -r -a EXC_ARR <<< "${PUBLISH_EXCLUDES}"
+#  for e in "${EXC_ARR[@]}"; do e="$(echo "$e" | xargs)"; [ -n "$e" ] && RSYNC_OPTS+=(--exclude="$e"); done
+#fi
 
 # SSH check
 ssh -p "$PORT" -o BatchMode=yes -o ConnectTimeout=10 "$REM" 'echo ok' >/dev/null || die "Cannot SSH to ${REM}:${PORT}"
