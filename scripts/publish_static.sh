@@ -38,6 +38,7 @@ HTACCESS_DEFAULT="${EXPORT_DIR}/.htaccess"
 if [ ! -f "$HTACCESS_DEFAULT" ]; then
   cat > "$HTACCESS_DEFAULT" <<'HT'
 Options -Indexes
+ErrorDocument 404 /404/
 HT
   msg "Created default .htaccess in export (you can customize it)."
 fi
