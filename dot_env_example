@@ -32,3 +32,7 @@ PUBLISH_EXCLUDES=".DS_Store,Thumbs.db"
 # --- Backups before publish ---
 PUBLISH_BACKUP_BEFORE=1
 # 1=enabled, 0=skip
+
+# --- Local DB dump retention ---
+# Keep only this many most-recent local dumps (0 = keep all)
+DUMP_LOCAL_KEEP=10
