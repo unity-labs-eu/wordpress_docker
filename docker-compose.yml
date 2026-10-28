@@ -35,7 +35,8 @@ services:
     entrypoint: ["sh","/import.sh"]
 
   wordpress:
-    image: wordpress:6.6-php8.2-apache
+    # image: wordpress:6.6-php8.2-apache
+    image: wordpress:6.1.1-php7.4-apache
     container_name: ${PROJECT_NAME}-wp
     depends_on:
       db:

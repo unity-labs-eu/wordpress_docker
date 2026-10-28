@@ -30,7 +30,7 @@ fi
 # <<<
 
 # Build rsync options compatibly
-RSYNC_OPTS=(-az --delete --human-readable)
+RSYNC_OPTS=(-az --delete --human-readable  --checksum)
 if "$RSYNC_BIN" --help 2>&1 | grep -q -- '--info='; then
   RSYNC_OPTS+=(--info=stats2)
 else

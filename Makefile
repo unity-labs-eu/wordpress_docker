@@ -13,6 +13,7 @@ help:
 	@echo "  cli        - Open WP-CLI shell"
 	@echo "  pma        - phpMyAdmin at http://localhost:8081"
 	@echo "  publish    - Rsync ./exports to hosting (direct/atomic)"
+	@echo "  publish-safe - Publish with automatic DB+files backup beforehand"
 	@echo "  clean-db   - Remove local DB volume (forces reimport)"
 	@echo "  clean-all  - Remove DB + containers"
 

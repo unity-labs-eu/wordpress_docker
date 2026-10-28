@@ -320,3 +320,13 @@ Add excludes in `scripts/sync_files.sh` or run your own `rsync` to `./data/wp/wp
 
 Built with ❤️ on top of official Docker images for WordPress, MariaDB, and phpMyAdmin; Simply Static by Patrick Posner.
 
+# simply static configuration
+
+## deploy tab
+/var/www/html/simply-static-exports
+
+# wp-config
+
+define('WP_MEMORY_LIMIT', '4096M');
+ini_set('max_execution_time', '300'); //300 seconds = 5 minutes
+
